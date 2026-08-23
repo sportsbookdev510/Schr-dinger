@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schrödinger | 薛定谔 — BNB Smart Chain</title>
+  <meta name="description" content="Schrödinger (薛定谔) — the quantum cat on BNB Smart Chain. Buy on PancakeSwap." />
+  <link rel="icon" href="./logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700&family=Syne:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bnb-yellow: #f0b90b;
+      --bnb-gold: #fcd535;
+      --bnb-amber: #ffc107;
+      --ink: #0b0b0c;
+      --ink-soft: #1a1608;
+      --cream: #fff8e7;
+      --muted: rgba(255, 248, 231, 0.72);
+      --line: rgba(240, 185, 11, 0.35);
+      --font-display: "Syne", system-ui, sans-serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+      --font-cn: "Noto Sans SC", "Syne", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--cream);
+      background: var(--ink);
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    /* —— Nav —— */
+    .nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: linear-gradient(180deg, rgba(11, 11, 12, 0.92), rgba(11, 11, 12, 0.55) 70%, transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      animation: spin-slow 18s linear infinite;
+    }
+
+    .nav-links {
+      display: none;
+      gap: 1.5rem;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover { color: var(--bnb-gold); }
+
+    .nav-buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 1rem;
+      background: linear-gradient(135deg, var(--bnb-yellow), var(--bnb-gold));
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 0.88rem;
+      border-radius: 10px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .nav-buy img { width: 20px; height: 20px; object-fit: contain; }
+    .nav-buy:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+    @media (min-width: 768px) {
+      .nav { padding: 1rem 2.5rem; }
+      .nav-links { display: flex; }
+    }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      align-items: end;
+      isolation: isolate;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(11, 11, 12, 0.25) 0%, rgba(11, 11, 12, 0.55) 45%, rgba(11, 11, 12, 0.97) 100%),
+        url("./banner.png") center / cover no-repeat;
+      animation: hero- ken 28s ease-in-out infinite alternate;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(240, 185, 11, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240, 185, 11, 0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 7rem 1.25rem 3.5rem;
+      display: grid;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1.15fr 0.85fr;
+        padding: 8rem 2.5rem 4rem;
+        gap: 2.5rem;
+      }
+    }
+
+    .hero-copy { position: relative; z-index: 2; }
+
+    .hero-symbol {
+      display: inline-block;
+      font-family: var(--font-cn);
+      font-weight: 700;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      letter-spacing: 0.18em;
+      color: var(--bnb-gold);
+      margin-bottom: 0.75rem;
+      animation: fade-up 0.8s ease both;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(3.2rem, 10vw, 6.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      background: linear-gradient(180deg, #fff8e7 20%, var(--bnb-gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+      animation: fade-up 0.9s 0.08s ease both;
+      text-shadow: 0 0 60px rgba(240, 185, 11, 0.15);
+    }
+
+    .hero-lead {
+      max-width: 34ch;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+      animation: fade-up 0.9s 0.16s ease both;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      animation: fade-up 0.9s 0.24s ease both;
+    }
+
+    .btn-buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.9rem 1.35rem;
+      background: linear-gradient(135deg, var(--bnb-yellow), #ffd54f);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 8px 28px rgba(240, 185, 11, 0.28);
+    }
+
+    .btn-buy img { width: 26px; height: 26px; object-fit: contain; }
+    .btn-buy:hover { transform: translateY(-3px) scale(1.02); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.9rem 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-weight: 600;
+      color: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--bnb-yellow);
+      background: rgba(240, 185, 11, 0.08);
+    }
+
+    /* Floating cat coin */
+    .hero-coin-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+      animation: fade-up 1s 0.2s ease both;
+    }
+
+    .coin-orbit {
+      position: absolute;
+      width: min(420px, 92vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px dashed rgba(240, 185, 11, 0.25);
+      animation: spin-slow 40s linear infinite;
+    }
+
+    .coin-orbit::before,
+    .coin-orbit::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bnb-gold);
+    }
+
+    .coin-orbit::before { top: 8%; left: 50%; transform: translateX(-50%); }
+    .coin-orbit::after { bottom: 12%; right: 18%; width: 6px; height: 6px; opacity: 0.7; }
+
+    .coin-glow {
+      position: absolute;
+      width: 70%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(240, 185, 11, 0.45), transparent 68%);
+      filter: blur(28px);
+      animation: pulse-glow 3.5s ease-in-out infinite;
+    }
+
+    .catcoin {
+      position: relative;
+      width: min(300px, 70vw);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      animation: float-y 5s ease-in-out infinite, coin-tilt 8s ease-in-out infinite;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.55));
+      transition: transform 0.35s ease;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .catcoin:hover {
+      animation-play-state: paused;
+      transform: scale(1.06) rotate(8deg);
+    }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bnb-gold);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 3;
+    }
+
+    /* —— Shared sections —— */
+    section {
+      position: relative;
+      padding: 5rem 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      section { padding: 6.5rem 2.5rem; }
+    }
+
+    .section-inner {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bnb-yellow);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .section-lead {
+      max-width: 52ch;
+      color: var(--muted);
+      font-size: 1.08rem;
+      margin-bottom: 2rem;
+    }
+
+    /* —— CA bar —— */
+    .ca-bar {
+      padding: 0 1.25rem 3rem;
+    }
+
+    .ca-inner {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1.25rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(240, 185, 11, 0.12), rgba(26, 22, 8, 0.6)),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 8px,
+          rgba(240, 185, 11, 0.03) 8px,
+          rgba(240, 185, 11, 0.03) 16px
+        );
+    }
+
+    .ca-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bnb-yellow);
+    }
+
+    .ca-value {
+      flex: 1;
+      min-width: 0;
+      font-family: ui-monospace, "Cascadia Code", monospace;
+      font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+      word-break: break-all;
+      color: var(--cream);
+    }
+
+    .ca-copy {
+      padding: 0.55rem 1rem;
+      background: var(--bnb-yellow);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      transition: filter 0.2s;
+      white-space: nowrap;
+    }
+
+    .ca-copy:hover { filter: brightness(1.08); }
+    .ca-copy.copied { background: #7cff9a; }
+
+    /* —— About —— */
+    .about {
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 20%, rgba(240, 185, 11, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 80%, rgba(252, 213, 53, 0.08), transparent),
+        var(--ink);
+    }
+
+    .about-grid {
+      display: grid;
+      gap: 2rem;
+    }
+
+    @media (min-width: 800px) {
+      .about-grid {
+        grid-template-columns: 1fr 1.2fr;
+        align-items: center;
+        gap: 3rem;
+      }
+    }
+
+    .about-visual {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .about-visual::before {
+      content: "";
+      position: absolute;
+      width: 85%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, transparent, var(--bnb-yellow), transparent, var(--bnb-gold), transparent);
+      opacity: 0.35;
+      animation: spin-slow 12s linear infinite;
+      filter: blur(2px);
+    }
+
+    .about-logo {
+      position: relative;
+      width: min(260px, 70vw);
+      border-radius: 50%;
+      animation: float-y 6s ease-in-out infinite reverse;
+      filter: drop-shadow(0 16px 32px rgba(240, 185, 11, 0.25));
+    }
+
+    .about-text p + p { margin-top: 1rem; color: var(--muted); }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .pill {
+      padding: 0.4rem 0.85rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--bnb-gold);
+      background: rgba(240, 185, 11, 0.06);
+    }
+
+    /* —— How to buy —— */
+    .howto {
+      background:
+        linear-gradient(180deg, transparent, rgba(240, 185, 11, 0.04), transparent),
+        var(--ink);
+    }
+
+    .steps {
+      display: grid;
+      gap: 1.25rem;
+      counter-reset: step;
+    }
+
+    @media (min-width: 700px) {
+      .steps { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    }
+
+    .step {
+      position: relative;
+      padding: 1.5rem 1.25rem 1.5rem;
+      border-top: 2px solid var(--bnb-yellow);
+      background: linear-gradient(180deg, rgba(240, 185, 11, 0.08), transparent);
+      transition: transform 0.25s ease, background 0.25s ease;
+      counter-increment: step;
+    }
+
+    .step:hover {
+      transform: translateY(-4px);
+      background: linear-gradient(180deg, rgba(240, 185, 11, 0.14), transparent);
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--bnb-yellow);
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+
+    .step h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p { color: var(--muted); font-size: 0.95rem; }
+
+    .howto-cta {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    /* —— Socials —— */
+    .socials {
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 0%, rgba(240, 185, 11, 0.15), transparent),
+        var(--ink-soft);
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 160px;
+      padding: 1.75rem 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(11, 11, 12, 0.5);
+      transition: transform 0.25s ease, border-color 0.25s, background 0.25s;
+    }
+
+    .social-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--bnb-yellow);
+      background: rgba(240, 185, 11, 0.1);
+    }
+
+    .social-icon {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bnb-yellow), var(--bnb-gold));
+      color: var(--ink);
+    }
+
+    .social-icon svg { width: 24px; height: 24px; fill: currentColor; }
+
+    .social-card span {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .social-card small {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .socials .section-inner { text-align: center; }
+    .socials .section-lead { margin-left: auto; margin-right: auto; }
+
+    /* —— Footer —— */
+    footer {
+      padding: 2rem 1.25rem 2.5rem;
+      border-top: 1px solid rgba(240, 185, 11, 0.15);
+      text-align: center;
+    }
+
+    .footer-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    footer .cn {
+      font-family: var(--font-cn);
+      color: var(--bnb-gold);
+    }
+
+    /* —— Animations —— */
+    @keyframes spin-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float-y {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    @keyframes coin-tilt {
+      0%, 100% { rotate: -4deg; }
+      50% { rotate: 6deg; }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.08); }
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes hero-ken {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+
+    @keyframes spark-fly {
+      0% { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <a class="nav-brand" href="#top">
+      <img src="./logo.png" alt="Schrödinger logo" />
+      <span>Schrödinger</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#howto">How to Buy</a>
+      <a href="#socials">Socials</a>
+    </nav>
+    <a
+      class="nav-buy"
+      href="https://pancakeswap.finance/swap?outputCurrency=0xComingSoon&chain=bsc"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img src="./pancakeswap.png" alt="" />
+      Buy
+    </a>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-label="Hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="hero-symbol">薛定谔</p>
+          <h1 class="hero-title">Schrödinger</h1>
+          <p class="hero-lead">
+            Alive and dead until you buy. The quantum cat lands on BNB Smart Chain.
+          </p>
+          <div class="hero-ctas">
+            <a
+              class="btn-buy"
+              href="https://pancakeswap.finance/swap?outputCurrency=0xComingSoon&chain=bsc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="./pancakeswap.png" alt="PancakeSwap" />
+              Buy on PancakeSwap
+            </a>
+            <a class="btn-ghost" href="#howto">How to Buy</a>
+          </div>
+        </div>
+        <div class="hero-coin-wrap" id="coinStage">
+          <div class="coin-orbit" aria-hidden="true"></div>
+          <div class="coin-glow" aria-hidden="true"></div>
+          <img
+            class="catcoin"
+            id="catcoin"
+            src="./catcoin.png"
+            alt="Schrödinger cat coin"
+            draggable="false"
+          />
+        </div>
+      </div>
+    </section>
+
+    <div class="ca-bar">
+      <div class="ca-inner">
+        <span class="ca-label">Contract</span>
+        <code class="ca-value" id="caAddress">0xComingSoon</code>
+        <button type="button" class="ca-copy" id="copyCa" aria-label="Copy contract address">
+          Copy CA
+        </button>
+      </div>
+    </div>
+
+    <section class="about" id="about">
+      <div class="section-inner about-grid">
+        <div class="about-visual reveal">
+          <img class="about-logo" src="./logo.png" alt="Schrödinger logo" />
+        </div>
+        <div class="about-text reveal">
+          <p class="section-label">About</p>
+          <h2 class="section-title">One cat. Infinite outcomes.</h2>
+          <p>
+            <strong>Schrödinger</strong> (<span style="font-family: var(--font-cn); color: var(--bnb-gold);">薛定谔</span>)
+            is a community-driven meme token on BNB Smart Chain — equal parts science joke and chart chaos.
+          </p>
+          <p>
+            Until you open the box (or your wallet), the cat is both pumping and dumping.
+            Trade it on PancakeSwap, share it with the pack, and decide the timeline yourself.
+          </p>
+          <div class="pill-row">
+            <span class="pill">BNB Smart Chain</span>
+            <span class="pill">Symbol: 薛定谔</span>
+            <span class="pill">PancakeSwap</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="howto" id="howto">
+      <div class="section-inner">
+        <p class="section-label reveal">How to Buy</p>
+        <h2 class="section-title reveal">Get 薛定谔 in three steps</h2>
+        <p class="section-lead reveal">
+          Grab BNB, open PancakeSwap, and swap into Schrödinger. Contract address is ready when you are.
+        </p>
+        <div class="steps">
+          <article class="step reveal">
+            <h3>Get a wallet</h3>
+            <p>Install MetaMask or Trust Wallet and switch the network to BNB Smart Chain.</p>
+          </article>
+          <article class="step reveal">
+            <h3>Fund with BNB</h3>
+            <p>Buy BNB on an exchange and send it to your wallet for gas and swaps.</p>
+          </article>
+          <article class="step reveal">
+            <h3>Swap on PancakeSwap</h3>
+            <p>
+              Open PancakeSwap, paste <code>0xComingSoon</code>, and swap BNB for Schrödinger.
+            </p>
+          </article>
+        </div>
+        <div class="howto-cta reveal">
+          <a
+            class="btn-buy"
+            href="https://pancakeswap.finance/swap?outputCurrency=0xComingSoon&chain=bsc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="./pancakeswap.png" alt="PancakeSwap" />
+            Buy Schrödinger Now
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="socials" id="socials">
+      <div class="section-inner">
+        <p class="section-label reveal">Socials</p>
+        <h2 class="section-title reveal">Join the observation</h2>
+        <p class="section-lead reveal">
+          Follow the cat. Charts collapse into memes the moment you look.
+        </p>
+        <div class="social-links">
+          <a
+            class="social-card reveal"
+            href="https://x.com/Schrdingeronbnb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="social-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.727-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </span>
+            <span>Twitter / X</span>
+            <small>@Schrdingeronbnb</small>
+          </a>
+          <a
+            class="social-card reveal"
+            href="https://pancakeswap.finance/swap?outputCurrency=0xComingSoon&chain=bsc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="social-icon" aria-hidden="true">
+              <img src="./pancakeswap.png" alt="" style="width:28px;height:28px;object-fit:contain;" />
+            </span>
+            <span>PancakeSwap</span>
+            <small>Trade 薛定谔</small>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img src="./logo.png" alt="" />
+      Schrödinger
+    </div>
+    <p>
+      <span class="cn">薛定谔</span> · BNB Smart Chain · CA: 0xComingSoon
+    </p>
+    <p style="margin-top:0.35rem;">Not financial advice. DYOR.</p>
+  </footer>
+
+  <script>
+    (function () {
+      const copyBtn = document.getElementById("copyCa");
+      const ca = document.getElementById("caAddress");
+      copyBtn.addEventListener("click", async () => {
+        const text = ca.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const range = document.createRange();
+          range.selectNode(ca);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          document.execCommand("copy");
+          sel.removeAllRanges();
+        }
+        copyBtn.textContent = "Copied!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => {
+          copyBtn.textContent = "Copy CA";
+          copyBtn.classList.remove("copied");
+        }, 1600);
+      });
+
+      const reveals = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+      );
+      reveals.forEach((el) => io.observe(el));
+
+      const stage = document.getElementById("coinStage");
+      const coin = document.getElementById("catcoin");
+
+      function spawnSparks(x, y, count) {
+        for (let i = 0; i < count; i++) {
+          const s = document.createElement("span");
+          s.className = "spark";
+          const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+          const dist = 40 + Math.random() * 90;
+          s.style.left = x + "px";
+          s.style.top = y + "px";
+          s.style.setProperty("--sx", Math.cos(angle) * dist + "px");
+          s.style.setProperty("--sy", Math.sin(angle) * dist + "px");
+          s.style.animation = "spark-fly 0.7s ease-out forwards";
+          s.style.animationDelay = Math.random() * 0.08 + "s";
+          stage.appendChild(s);
+          setTimeout(() => s.remove(), 800);
+        }
+      }
+
+      coin.addEventListener("click", (e) => {
+        const rect = stage.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        spawnSparks(x, y, 14);
+      });
+
+      let mx = 0, my = 0, tx = 0, ty = 0;
+      stage.addEventListener("pointermove", (e) => {
+        const rect = stage.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width - 0.5;
+        const ny = (e.clientY - rect.top) / rect.height - 0.5;
+        tx = nx * 18;
+        ty = ny * -14;
+      });
+      stage.addEventListener("pointerleave", () => {
+        tx = 0;
+        ty = 0;
+      });
+
+      function tick() {
+        mx += (tx - mx) * 0.08;
+        my += (ty - my) * 0.08;
+        coin.style.transform = `translate(${mx * 0.3}px, ${my * 0.3}px) rotateX(${my}deg) rotateY(${mx}deg)`;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      setInterval(() => {
+        const rect = stage.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const x = rect.width * (0.35 + Math.random() * 0.3);
+        const y = rect.height * (0.3 + Math.random() * 0.35);
+        spawnSparks(x, y, 5);
+      }, 2800);
+    })();
+  </script>
+</body>
+</html>
